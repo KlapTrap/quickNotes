@@ -1,12 +1,25 @@
 'use strict';
 
-angular.module('notesApp')
-  .controller('MainCtrl', function ($scope, $resource) {
-  	var end = '][';
+angular.module('notesApp').controller('MainCtrl', function ($scope, $resource, $http) {
+	var end = '][';
   	$scope.notes = [];
-    $scope.checkForEnd = function() {
 
-    	var Note = $resource('http://localhost:8081/notes')
+  	
+
+	var TodaysNotesR = $resource('http://localhost:8081/notes', {today: true});
+
+  	var todaysNotes = TodaysNotesR.query(function () {
+  		$scope.notes = todaysNotes;
+  	});
+
+	var Notes = $resource('http://localhost:8081/notes');
+	// var todaysNotes = $resource('http://localhost:8081/notes', {}, {
+	// 	query: {method:'GET', params:{}, }
+	// })
+
+
+
+    $scope.checkForEnd = function() {
 
     	var ended = $scope.noteData.indexOf(end)
     	if(ended > 0){
@@ -41,12 +54,15 @@ angular.module('notesApp')
 			   }
 
 			var newNote = {data: $scope.noteData.substr(0, ended) + $scope.noteData.substr(ended + end.length, $scope.noteData.length), date: curr_hour + " : " + curr_min + " " + a_p}
+			var newNoteToSave = newNote
+			newNoteToSave.saveDate = d.getDate().toString() + d.getMonth().toString() + d.getFullYear().toString()
+			var newNotedb = new Notes(newNoteToSave)
+			newNotedb.$save(function() {
+				$scope.notes.push(newNote);
+    			$scope.noteData = '';
+			})
 
-			var newNotedb = new Note(newNote)
-			newNotedb.$save()
-
-    		$scope.notes.push(newNote);
-    		$scope.noteData = '';
+    		
 		}    
 	}
   });

@@ -7,7 +7,7 @@ module.exports = {
 		notesCollection = db.collection('notes');
 	},
 	create: function (req, res) {
-		notesCollection.insert({data: req.body.data, date: req.body.date, saveDate: req.body.saveDate}, function(err, docs) {
+		notesCollection.insert({data: req.body.data, tags: req.body.tags, date: req.body.date, saveDate: req.body.saveDate}, function(err, docs) {
 			if(!err) {
 				console.log('Saved ', docs)
 				res.json({success: true});
@@ -19,7 +19,6 @@ module.exports = {
 		
 	},
 	readAll: function (req, res) {
-		console.log(req.query)
 		if(req.query.today){
 			// A request for only todays notes
 			var d = new Date();
@@ -33,7 +32,7 @@ module.exports = {
 		cursor.toArray(function(err, docs) {
 			res.json({success: true, results: docs});
 		})
-	}
+	},
 	update: function (req, res) {
 		res.end('update')
 	},

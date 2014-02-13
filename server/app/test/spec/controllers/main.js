@@ -16,7 +16,33 @@ describe('Controller: MainCtrl', function () {
     });
   }));
 
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(scope.awesomeThings.length).toBe(3);
-  });
+  describe('userHasEnded', function () {
+    it('Should find end.', function () {
+      scope.noteData = "dsl[k54fjds" + scope.end + "fjd]34sfkh"
+      expect(scope.userHasEnded()).toBe(true);
+    });
+
+    it('Should not find end.', function () {
+
+      scope.noteData = "aaaabbbbccccc"
+      expect(scope.userHasEnded()).toBe(false);
+
+      scope.noteData = "dslkfjds[f]jd]s[fkh"
+      expect(scope.userHasEnded()).toBe(false);
+    });
+  })
+
+  describe('addNewNote', function () {
+    it('Should add new note', function () {
+      var testNoteData = "12" + scope.end + "34",
+          expectedReturnData = "1234";
+
+      scope.noteData = testNoteData  
+      scope.addNewNote();
+      console.log(scope.notes)
+      expect(scope.notes[0].data).toBe(expectedReturnData);
+
+    })  
+  })
+  
 });

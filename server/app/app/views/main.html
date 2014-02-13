@@ -21,6 +21,7 @@
 <ul class="list-group">
   <li class="list-group-item alert alert-info" ng-repeat="note in notes">
     <span class="label label-warning">{{$index}}</span><span class="label label-primary">{{note.date}}</span> {{note.data}}
+    <div class="pull-right">Tags: {{note.tags}}</div> 
   </li>
 </ul>
 
